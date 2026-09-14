@@ -1,0 +1,16 @@
+{
+    "name": "الاسم",
+    "upload_image": "رفع صور",
+    "select_image": "اختيار صورة",
+    "upload": "رفع",
+    "login_hero_caption": "نموذج تجريبي لعرض واجهة المستخدم",
+    "username": "اسم المستخدم",
+    "password": "كلمة المرور",
+    "login": "تسجيل الدخول",
+    "forgot_password": "نسيت كلمة المرور؟",
+    "not_registered": "ليس لديك حساب؟",
+    "create_account": "إنشاء حساب",
+    "username_required": "اسم المستخدم مطلوب",
+    "password_required": "كلمة المرور مطلوبة",
+    "password_short": "كلمة المرور قصيرة!"
+}

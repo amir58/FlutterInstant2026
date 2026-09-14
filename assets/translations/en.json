@@ -1,0 +1,16 @@
+{
+    "name": "Name",
+    "upload_image": "Upload image",
+    "select_image": "Select image",
+    "upload": "Upload",
+    "login_hero_caption": "Vector mock-up for ui/ux demonstration",
+    "username": "Username",
+    "password": "Password",
+    "login": "LOGIN",
+    "forgot_password": "Forgot Password?",
+    "not_registered": "Not registered?",
+    "create_account": "Create an account",
+    "username_required": "Username required",
+    "password_required": "Password required",
+    "password_short": "Password short!"
+}

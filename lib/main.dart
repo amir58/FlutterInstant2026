@@ -1,21 +1,35 @@
-import 'package:device_preview/device_preview.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:navigations/core/bloc/my_bloc_observer.dart';
 import 'package:navigations/core/routing/router.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await EasyLocalization.ensureInitialized();
+
   Bloc.observer = MyBlocObserver();
 
   runApp(
-    DevicePreview(
-      enabled: false,
-      // enabled: kDebugMode || kProfileMode,
-      builder: (context) {
-        return MainApp();
-      },
+    EasyLocalization(
+      supportedLocales: const [Locale('en'), Locale('ar')],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('en'),
+      useOnlyLangCode: true,
+      child: MainApp(),
     ),
   );
+
+  // runApp(
+  //   DevicePreview(
+  //     enabled: false,
+  //     // enabled: kDebugMode || kProfileMode,
+  //     builder: (context) {
+  //       return MainApp();
+  //     },
+  //   ),
+  // );
 }
 
 class MainApp extends StatelessWidget {
@@ -23,6 +37,11 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(routerConfig: router);
+    return MaterialApp.router(
+      routerConfig: router,
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
+    );
   }
 }

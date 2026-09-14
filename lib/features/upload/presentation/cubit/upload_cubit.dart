@@ -27,7 +27,7 @@ class UploadCubit extends Cubit<UploadState> {
     );
 
     switch (result) {
-      case ApiSuccess(:final data):
+      case ApiSuccess():
         emit(UploadSuccessState());
       case ApiFailure(:final failure):
         emit(UploadFailureState(failure.message));
