@@ -4,6 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:navigations/core/bloc/my_bloc_observer.dart';
 import 'package:navigations/core/routing/router.dart';
 
+// App id = Package name = Bundle id 
+// Package name => android
+// Bundle id => iOS
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
