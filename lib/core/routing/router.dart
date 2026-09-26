@@ -34,7 +34,7 @@ import 'package:navigations/features/upload/presentation/pages/upload_screen.dar
 
 final router = GoRouter(
   // initialLocation: '/',
-  // initialLocation: Routes.products,
+  // initialLocation: Routes.home,
   initialLocation: Routes.mapSample,
   routes: [
     GoRoute(

@@ -20,6 +20,8 @@ class CartProductItem extends StatefulWidget {
 class _CartProductItemState extends State<CartProductItem> {
   @override
   Widget build(BuildContext context) {
+    debugPrint('Name => ${widget.product.title}');
+
     return Card(
       color: Colors.white,
       child: Padding(

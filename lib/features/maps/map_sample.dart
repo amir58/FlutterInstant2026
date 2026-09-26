@@ -1,7 +1,9 @@
-import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:navigations/features/maps/select_location.dart';
 
 class MapSample extends StatefulWidget {
   const MapSample({super.key});
@@ -11,40 +13,121 @@ class MapSample extends StatefulWidget {
 }
 
 class MapSampleState extends State<MapSample> {
-  final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
+  GoogleMapController? _mapController;
+  String? _mapStyle;
 
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
-
-  static const CameraPosition _kLake = CameraPosition(
-    bearing: 192.8334901395799,
-    target: LatLng(37.43296265331129, -122.08832357078792),
-    tilt: 59.440717697143555,
-    zoom: 19.151926040649414,
-  );
+  Set<Marker> markers = {};
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: GoogleMap(
-        mapType: MapType.hybrid,
-        initialCameraPosition: _kGooglePlex,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _goToTheLake,
-        label: const Text('To the lake!'),
-        icon: const Icon(Icons.directions_boat),
+  void initState() {
+    super.initState();
+    _loadMapStyle();
+    addIntialMarkers();
+  }
+
+  void addIntialMarkers() {
+    markers.add(
+      Marker(
+        markerId: MarkerId('value'),
+        position: LatLng(30.057013, 31.201577),
+        infoWindow: InfoWindow(
+          title: 'Location',
+          snippet: "My Location",
+        ),
       ),
     );
   }
 
-  Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+  // Load the JSON file from assets
+  Future<void> _loadMapStyle() async {
+    final style = await rootBundle.loadString(
+      'assets/map/map_style.json',
+    );
+    setState(() {
+      _mapStyle = style;
+    });
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    _mapController = controller;
+    // Apply style if it was loaded before the map finished building
+    if (_mapStyle != null) {
+      _mapController!.setMapStyle(_mapStyle);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Column(
+        children: [
+          Stack(
+            children: [
+              Container(
+                height: 200,
+                margin: EdgeInsets.all(10),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: GoogleMap(
+                    mapType: MapType.normal,
+                    trafficEnabled: false,
+                    zoomGesturesEnabled: false,
+                    zoomControlsEnabled: false,
+                    scrollGesturesEnabled: false,
+                    rotateGesturesEnabled: false,
+                    mapToolbarEnabled: false,
+                    myLocationButtonEnabled: false,
+                    myLocationEnabled: false,
+                    initialCameraPosition: CameraPosition(
+                      // target: LatLng(30.0444, 31.2357),
+                      // target: LatLng(30.053190, 31.201824),
+                      target: LatLng(30.057013, 31.201577),
+                      zoom: 18,
+                    ),
+                    markers: markers,
+
+                    onMapCreated: (controller) {
+                      _onMapCreated(controller);
+                      // Apply style here if it finishes loading after map creation
+                      if (_mapStyle != null) {
+                        controller.setMapStyle(_mapStyle);
+                      }
+                    },
+                  ),
+                ),
+              ),
+              BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                child: Container(
+                  height: 200,
+                  width: double.infinity,
+                  margin: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text('Login to view the location'),
+                ),
+              ),
+            ],
+          ),
+
+          SizedBox(height: 50),
+
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SelectLocationScreen(),
+                ),
+              );
+            },
+            child: Text('Select your location'),
+          ),
+        ],
+      ),
+    );
   }
 }

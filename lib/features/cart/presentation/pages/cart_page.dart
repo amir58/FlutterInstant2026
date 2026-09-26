@@ -84,6 +84,8 @@ class CartProductsList extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(),
       itemCount: products.length,
       itemBuilder: (context, index) {
+        debugPrint('Index => $index');
+
         final product = products[index];
 
         return CartProductItem(
