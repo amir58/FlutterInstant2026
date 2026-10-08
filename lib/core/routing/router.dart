@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:navigations/core/api/dio_factory.dart';
+import 'package:navigations/core/database/db.dart';
 import 'package:navigations/core/routing/routes.dart';
 import 'package:navigations/features/cart/data/datasources/cart_remote_data_source.dart';
 import 'package:navigations/features/cart/data/repositories/cart_repo.dart';
@@ -10,6 +11,12 @@ import 'package:navigations/features/cart/presentation/pages/cart_page.dart';
 import 'package:navigations/features/cities_screen.dart';
 import 'package:navigations/features/counter/cubit/counter_cubit.dart';
 import 'package:navigations/features/counter/pages/counter_page.dart';
+import 'package:navigations/features/expenses/data/datasources/expenses_local_data_source.dart';
+import 'package:navigations/features/expenses/data/repositories/expenses_repository_impl.dart';
+import 'package:navigations/features/expenses/domain/usecases/get_categories_usecase.dart';
+import 'package:navigations/features/expenses/domain/usecases/get_month_overview_usecase.dart';
+import 'package:navigations/features/expenses/presentation/cubit/expenses_cubit.dart';
+import 'package:navigations/features/expenses/presentation/pages/expenses_page.dart';
 import 'package:navigations/features/home_screen.dart';
 import 'package:navigations/features/login/data/data_sources/auth_datasource.dart';
 import 'package:navigations/features/login/data/data_sources/token_local_datasource.dart';
@@ -35,7 +42,7 @@ import 'package:navigations/features/upload/presentation/pages/upload_screen.dar
 final router = GoRouter(
   // initialLocation: '/',
   // initialLocation: Routes.home,
-  initialLocation: Routes.mapSample,
+  initialLocation: Routes.expenses,
   routes: [
     GoRoute(
       path: '/',
@@ -47,6 +54,24 @@ final router = GoRouter(
           ),
         ),
         child: LoginScreen(),
+      ),
+    ),
+    GoRoute(
+      path: Routes.expenses,
+      builder: (context, state) => BlocProvider(
+        create: (context) => ExpensesCubit(
+          GetCategoriesUseCase(
+            ExpensesRepositoryImpl(
+              ExpensesLocalDataSourceImpl(DatabaseHelper()),
+            ),
+          ),
+          GetMonthOverviewUseCase(
+            ExpensesRepositoryImpl(
+              ExpensesLocalDataSourceImpl(DatabaseHelper()),
+            ),
+          ),
+        ),
+        child: ExpensesPage(),
       ),
     ),
     GoRoute(
