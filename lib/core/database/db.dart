@@ -9,12 +9,18 @@ class DatabaseHelper {
   Future<Database> get database => _database ??= _open();
 
   Future<Database> _open() async {
-    return openDatabase(
-      DbTables.fileName,
-      version: DbTables.version,
-      onConfigure: _onConfigure,
-      onCreate: _onCreate,
-    );
+    try {
+      return await openDatabase(
+        DbTables.fileName,
+        version: DbTables.version,
+        onConfigure: _onConfigure,
+        onCreate: _onCreate,
+      );
+    } catch (_) {
+      _database =
+          null; // الفتح فشل؟ النداء الجاي يحاول من الأول بدل ما يفضل فاشل للأبد
+      rethrow;
+    }
   }
 
   Future<void> _onConfigure(Database db) async {
@@ -25,14 +31,16 @@ class DatabaseHelper {
     await db.execute(DbTables.createCategories);
     await db.execute(DbTables.createExpenses);
 
-    // seed = بذرة
-    // seeder = بيضيف البيانات الاساسية في الداتا بيز 
-    
-    // batch = كذا عملية في رحلة واحدة للداتابيز
     final batch = db.batch();
     for (final category in DbTables.defaultCategories) {
       batch.insert(DbTables.categories, category);
     }
     await batch.commit(noResult: true);
+  }
+
+  Future<void> close() async {
+    final pending = _database;
+    _database = null;
+    if (pending != null) await (await pending).close();
   }
 }

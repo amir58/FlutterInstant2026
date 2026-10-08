@@ -27,12 +27,11 @@ class DbTables {
     )
   ''';
 
-  
   static const List<Map<String, Object>> defaultCategories = [
-  {'name': 'أكل وشرب', 'color': 0xFFF59E0B},
-  {'name': 'مواصلات', 'color': 0xFF38BDF8},
-  {'name': 'فواتير', 'color': 0xFFA78BFA},
-  {'name': 'ترفيه', 'color': 0xFFF472B6},
-  {'name': 'هدايا', 'color': 0xFF34D399},
-];
+    {'name': 'أكل وشرب', 'color': 0xFFF59E0B},
+    {'name': 'مواصلات', 'color': 0xFF38BDF8},
+    {'name': 'فواتير', 'color': 0xFFA78BFA},
+    {'name': 'ترفيه', 'color': 0xFFF472B6},
+    {'name': 'هدايا', 'color': 0xFF34D399},
+  ];
 }
