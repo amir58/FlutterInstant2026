@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:navigations/core/database/db.dart';
+import 'package:navigations/core/di/dependency_injection.dart';
 import 'package:navigations/core/utils/money.dart';
-import 'package:navigations/features/expenses/data/datasources/expenses_local_data_source.dart';
-import 'package:navigations/features/expenses/data/repositories/expenses_repository_impl.dart';
-import 'package:navigations/features/expenses/domain/usecases/delete_expense_usecase.dart';
-import 'package:navigations/features/expenses/domain/usecases/save_expense_usecase.dart';
 import 'package:navigations/features/expenses/presentation/cubit/form_cubit.dart';
 import 'package:navigations/features/expenses/presentation/cubit/form_state.dart';
 
@@ -23,18 +19,7 @@ Future<void> openExpenseForm(
     isScrollControlled: true,
 
     builder: (_) => BlocProvider(
-      create: (context) => ExpenseFormCubit(
-        SaveExpenseUseCase(
-          ExpensesRepositoryImpl(
-            ExpensesLocalDataSourceImpl(DatabaseHelper()),
-          ),
-        ),
-        DeleteExpenseUseCase(
-          ExpensesRepositoryImpl(
-            ExpensesLocalDataSourceImpl(DatabaseHelper()),
-          ),
-        ),
-      ),
+      create: (context) => getIt<ExpenseFormCubit>(),
       child: ExpenseFormSheet(
         categories: categories,
         expense: expense,

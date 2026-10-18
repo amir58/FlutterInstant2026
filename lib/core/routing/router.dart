@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:navigations/core/api/dio_factory.dart';
-import 'package:navigations/core/database/db.dart';
+import 'package:navigations/core/di/dependency_injection.dart';
 import 'package:navigations/core/routing/routes.dart';
 import 'package:navigations/features/cart/data/datasources/cart_remote_data_source.dart';
 import 'package:navigations/features/cart/data/repositories/cart_repo.dart';
@@ -11,10 +11,6 @@ import 'package:navigations/features/cart/presentation/pages/cart_page.dart';
 import 'package:navigations/features/cities_screen.dart';
 import 'package:navigations/features/counter/cubit/counter_cubit.dart';
 import 'package:navigations/features/counter/pages/counter_page.dart';
-import 'package:navigations/features/expenses/data/datasources/expenses_local_data_source.dart';
-import 'package:navigations/features/expenses/data/repositories/expenses_repository_impl.dart';
-import 'package:navigations/features/expenses/domain/usecases/get_categories_usecase.dart';
-import 'package:navigations/features/expenses/domain/usecases/get_month_overview_usecase.dart';
 import 'package:navigations/features/expenses/presentation/cubit/expenses_cubit.dart';
 import 'package:navigations/features/expenses/presentation/pages/expenses_page.dart';
 import 'package:navigations/features/home_screen.dart';
@@ -59,18 +55,7 @@ final router = GoRouter(
     GoRoute(
       path: Routes.expenses,
       builder: (context, state) => BlocProvider(
-        create: (context) => ExpensesCubit(
-          GetCategoriesUseCase(
-            ExpensesRepositoryImpl(
-              ExpensesLocalDataSourceImpl(DatabaseHelper()),
-            ),
-          ),
-          GetMonthOverviewUseCase(
-            ExpensesRepositoryImpl(
-              ExpensesLocalDataSourceImpl(DatabaseHelper()),
-            ),
-          ),
-        ),
+        create: (context) => getIt<ExpensesCubit>(),
         child: ExpensesPage(),
       ),
     ),
