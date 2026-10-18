@@ -17,7 +17,6 @@ Future<void> openExpenseForm(
   final changed = await showModalBottomSheet<bool>(
     context: context,
     isScrollControlled: true,
-
     builder: (_) => BlocProvider(
       create: (context) => getIt<ExpenseFormCubit>(),
       child: ExpenseFormSheet(
