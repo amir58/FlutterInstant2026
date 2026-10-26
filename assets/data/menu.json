@@ -1,0 +1,10 @@
+[
+  { "id": 1, "name": "لاتيه", "description": "إسبريسو دبل ولبن متبخّر برغوة ناعمة.", "emoji": "☕", "tint": "#F3E3D1", "category": "hot", "price": 60 },
+  { "id": 2, "name": "شاي أخضر", "description": "شاي أخضر بالنعناع، خفيف ومنعش.", "emoji": "🍵", "tint": "#E1EFD8", "category": "hot", "price": 35 },
+  { "id": 3, "name": "هوت شوكليت", "description": "شوكولاتة سايحة في لبن سخن، وعليها كريمة.", "emoji": "🍫", "tint": "#EADBD0", "category": "hot", "price": 55 },
+  { "id": 4, "name": "آيس لاتيه", "description": "إسبريسو على تلج ولبن ساقع.", "emoji": "🧋", "tint": "#E3EBF5", "category": "iced", "price": 70 },
+  { "id": 5, "name": "فرابيه", "description": "قهوة مخفوقة بالتلج والكراميل.", "emoji": "🥤", "tint": "#F3E1EA", "category": "iced", "price": 75 },
+  { "id": 6, "name": "ليمون نعناع", "description": "ليمون فريش ونعناع ومتلّج.", "emoji": "🍋", "tint": "#F2F1D2", "category": "iced", "price": 40 },
+  { "id": 7, "name": "كرواسون", "description": "كرواسون زبدة طازة من الفرن.", "emoji": "🥐", "tint": "#F7E8D0", "category": "dessert", "price": 45 },
+  { "id": 8, "name": "تشيز كيك", "description": "تشيز كيك بصوص الفراولة.", "emoji": "🍰", "tint": "#F9E0E0", "category": "dessert", "price": 85 }
+]

@@ -31,6 +31,10 @@ class CancelledFailure extends Failure {
   const CancelledFailure() : super('اتلغى الطلب');
 }
 
+class DataFormatFailure extends Failure {
+  const DataFormatFailure(super.message);
+}
+
 class UnknownFailure extends Failure {
   const UnknownFailure(super.message);
 }

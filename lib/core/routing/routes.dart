@@ -9,4 +9,5 @@ class Routes {
   static const String upload = '/upload';
   static const String mapSample = '/map_sample';
   static const String expenses = '/expenses';
+  static const String ahwety = '/ahwety';
 }

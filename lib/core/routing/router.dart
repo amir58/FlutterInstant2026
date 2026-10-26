@@ -4,6 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:navigations/core/api/dio_factory.dart';
 import 'package:navigations/core/di/dependency_injection.dart';
 import 'package:navigations/core/routing/routes.dart';
+import 'package:navigations/features/ahwety/presentation/bloc/cart_cubit.dart';
+import 'package:navigations/features/ahwety/presentation/bloc/menu_cubit.dart';
+import 'package:navigations/features/ahwety/presentation/pages/ahwety_page.dart';
 import 'package:navigations/features/cart/data/datasources/cart_remote_data_source.dart';
 import 'package:navigations/features/cart/data/repositories/cart_repo.dart';
 import 'package:navigations/features/cart/presentation/cubit/cart_cubit.dart';
@@ -38,7 +41,7 @@ import 'package:navigations/features/upload/presentation/pages/upload_screen.dar
 final router = GoRouter(
   // initialLocation: '/',
   // initialLocation: Routes.home,
-  initialLocation: Routes.expenses,
+  initialLocation: Routes.ahwety,
   routes: [
     GoRoute(
       path: '/',
@@ -131,6 +134,17 @@ final router = GoRouter(
     GoRoute(
       path: Routes.mapSample,
       builder: (context, state) => MapSample(),
+    ),
+
+    GoRoute(
+      path: Routes.ahwety,
+      builder: (context, state) => MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (_) => getIt<MenuCubit>()..load()),
+          BlocProvider(create: (context) => getIt<MenuCartCubit>()),
+        ],
+        child: MenuPage(),
+      ),
     ),
   ],
 );

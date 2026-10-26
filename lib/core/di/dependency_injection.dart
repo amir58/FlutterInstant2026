@@ -1,5 +1,12 @@
+import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:navigations/core/database/db.dart';
+import 'package:navigations/features/ahwety/data/datasources/menu_local_data_source.dart';
+import 'package:navigations/features/ahwety/data/repositories/menu_repo_impl.dart';
+import 'package:navigations/features/ahwety/domain/repositories/menu_repo.dart';
+import 'package:navigations/features/ahwety/domain/usecases/get_menu_use_case.dart';
+import 'package:navigations/features/ahwety/presentation/bloc/cart_cubit.dart';
+import 'package:navigations/features/ahwety/presentation/bloc/menu_cubit.dart';
 import 'package:navigations/features/expenses/data/datasources/expenses_local_data_source.dart';
 import 'package:navigations/features/expenses/data/repositories/expenses_repository_impl.dart';
 import 'package:navigations/features/expenses/domain/repos/expenses_repo.dart';
@@ -16,6 +23,11 @@ void setupGetIt() {
   // Core
   getIt.registerLazySingleton(() => DatabaseHelper());
 
+  _setupExpenses();
+  _setupAhwety();
+}
+
+void _setupExpenses() {
   // Data
   getIt.registerLazySingleton<ExpensesLocalDataSource>(
     () => ExpensesLocalDataSourceImpl(getIt()),
@@ -34,4 +46,20 @@ void setupGetIt() {
   // Presenstion
   getIt.registerFactory(() => ExpensesCubit(getIt(), getIt()));
   getIt.registerFactory(() => ExpenseFormCubit(getIt(), getIt()));
+}
+
+void _setupAhwety() {
+  getIt.registerLazySingleton<MenuLocalDataSource>(
+    () => MenuLocalDataSourceImpl(rootBundle),
+  );
+
+  getIt.registerLazySingleton<MenuRepository>(
+    () => MenuRepositoryImpl(getIt()),
+  );
+
+  getIt.registerLazySingleton(() => GetMenuUseCase(getIt()));
+
+  getIt.registerFactory(() => MenuCubit(getIt()));
+
+  getIt.registerFactory(() => MenuCartCubit());
 }
