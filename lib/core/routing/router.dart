@@ -23,6 +23,7 @@ import 'package:navigations/features/login/data/repo/auth_repo.dart';
 import 'package:navigations/features/login/presentation/cubit/login_cubit.dart';
 import 'package:navigations/features/login/presentation/pages/login_screen.dart';
 import 'package:navigations/features/maps/map_sample.dart';
+import 'package:navigations/features/notes/notes_screen.dart';
 import 'package:navigations/features/product_details/data/datasources/product_details_remote_data_source.dart';
 import 'package:navigations/features/product_details/data/repositories/product_details_repo.dart';
 import 'package:navigations/features/product_details/presentation/cubit/product_details_cubit.dart';
@@ -41,7 +42,7 @@ import 'package:navigations/features/upload/presentation/pages/upload_screen.dar
 final router = GoRouter(
   // initialLocation: '/',
   // initialLocation: Routes.home,
-  initialLocation: Routes.ahwety,
+  initialLocation: Routes.notes,
   routes: [
     GoRoute(
       path: '/',
@@ -54,6 +55,10 @@ final router = GoRouter(
         ),
         child: LoginScreen(),
       ),
+    ),
+    GoRoute(
+      path: Routes.notes,
+      builder: (context, state) => NotesScreen(),
     ),
     GoRoute(
       path: Routes.expenses,

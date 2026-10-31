@@ -4,6 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:navigations/core/bloc/my_bloc_observer.dart';
 import 'package:navigations/core/di/dependency_injection.dart';
 import 'package:navigations/core/routing/router.dart';
+import 'package:navigations/core/theme/app_theme.dart';
+import 'package:navigations/core/theme/theme_cubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // App id = Package name = Bundle id
 // Package name => android
@@ -41,14 +44,24 @@ Future<void> main() async {
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
-
+  
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: router,
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
+    return BlocProvider(
+      create: (context) => ThemeCubit(getIt()),
+      child: BlocBuilder<ThemeCubit, ThemeMode>(
+        builder: (context, mode) {
+          return MaterialApp.router(
+            routerConfig: router,
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
+            theme: AppTheme.light,
+            darkTheme: AppTheme.dark,
+            themeMode: mode,
+          );
+        },
+      ),
     );
   }
 }

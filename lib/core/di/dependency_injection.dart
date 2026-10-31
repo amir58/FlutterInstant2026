@@ -16,12 +16,16 @@ import 'package:navigations/features/expenses/domain/usecases/get_month_overview
 import 'package:navigations/features/expenses/domain/usecases/save_expense_usecase.dart';
 import 'package:navigations/features/expenses/presentation/cubit/expenses_cubit.dart';
 import 'package:navigations/features/expenses/presentation/cubit/form_cubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
 
-void setupGetIt() {
+Future<void> setupGetIt() async {
   // Core
   getIt.registerLazySingleton(() => DatabaseHelper());
+
+  final prefs = await SharedPreferences.getInstance();
+  getIt.registerLazySingleton(() => prefs);
 
   _setupExpenses();
   _setupAhwety();
