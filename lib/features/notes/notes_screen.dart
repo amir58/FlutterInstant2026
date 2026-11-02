@@ -1,11 +1,83 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:navigations/core/theme/theme_toggle_button.dart';
 import 'package:navigations/core/utils/theme_x.dart';
 
 import 'note.dart';
 
-class NotesScreen extends StatelessWidget {
+class NotesScreen extends StatefulWidget {
   const NotesScreen({super.key});
+
+  @override
+  State<NotesScreen> createState() => _NotesScreenState();
+}
+
+class _NotesScreenState extends State<NotesScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // signUp();
+    // signIn();
+    // FirebaseAuth.instance.signOut();
+    // debugPrint(FirebaseAuth.instance.currentUser?.uid ?? 'null');
+    // FirebaseAuth.instance.sendPasswordResetEmail(
+    //   email: 'jqalhnpljxqftdjmpj@jbsze.com',
+    // );
+
+    // google();
+  }
+
+  Future<void> google() async {
+    // مرة واحدة في main بعد Firebase.initializeApp
+    await GoogleSignIn.instance.initialize();
+
+    try {
+      // لما المستخدم يدوس الزرار
+      final account = await GoogleSignIn.instance.authenticate();
+
+      final credential = GoogleAuthProvider.credential(
+        idToken: account.authentication.idToken,
+      );
+
+      await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> signIn() async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: 'jqalhnpljxqftdjmpj@jbsze.com',
+        password: 'secret123',
+        // password: '123456',
+      );
+    } on FirebaseAuthException catch (e) {
+      debugPrint(e.code);
+      debugPrint(e.message);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> signUp() async {
+    final credential = await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+          email: 'jqalhnpljxqftdjmpj@jbsze.com',
+          password: 'secret123',
+        );
+
+    final user = credential
+        .user!; // المستخدم اتعمل ودخل كمان — مش محتاج signIn بعدها
+
+    debugPrint(user.email);
+    debugPrint(user.uid);
+
+    await user.updateDisplayName('أمير');
+    await user
+        .sendEmailVerification(); // اختياري: لينك تأكيد على الإيميل
+  }
 
   @override
   Widget build(BuildContext context) {

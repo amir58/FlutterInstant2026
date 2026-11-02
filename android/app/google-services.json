@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "730316660136",
+    "project_id": "instant-flutter-course",
+    "storage_bucket": "instant-flutter-course.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:730316660136:android:7f22533961b98c41c4519d",
+        "android_client_info": {
+          "package_name": "com.example.navigations"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5GfDI1JhdWsPT6tpqPDHI6MQJM_c01no"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
