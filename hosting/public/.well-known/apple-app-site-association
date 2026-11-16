@@ -1,0 +1,10 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["4T54AJ65Q6.com.example.navigations"],
+        "components": [{ "/": "/l/*" }]
+      }
+    ]
+  }
+}

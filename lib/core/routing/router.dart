@@ -107,12 +107,13 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-      path: 'l/:id',
+      path: Routes.listing,
+      redirect: (context, state) =>
+          int.tryParse(state.pathParameters['id'] ?? '') == null
+          ? Routes.home
+          : null,
       builder: (context, state) {
-        // final productId = state.extra as int;
-        final productId = state.pathParameters['id'] ?? '0';
-        
-        final productIdAsInt = int.tryParse(productId) ?? 0;
+        final productId = int.parse(state.pathParameters['id']!);
 
         return BlocProvider(
           create: (context) => ProductDetailsCubit(
@@ -120,7 +121,7 @@ final router = GoRouter(
               ProductDetailsRemoteDataSource(DioFactory.getDio()),
             ),
           ),
-          child: ProductDetailsScreen(productId: productIdAsInt),
+          child: ProductDetailsScreen(productId: productId),
         );
       },
     ),

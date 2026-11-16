@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:navigations/core/bloc/my_bloc_observer.dart';
 import 'package:navigations/core/di/dependency_injection.dart';
+import 'package:navigations/core/routing/deep_links.dart';
 import 'package:navigations/core/routing/router.dart';
 import 'package:navigations/core/theme/app_theme.dart';
 import 'package:navigations/core/theme/theme_cubit.dart';
@@ -36,10 +37,7 @@ Future<void> main() async {
   await setupRemoteConfig();
 
   // Subscribe to all events (initial link and further)
-  final sub = appLinks.uriLinkStream.listen((uri) {
-      // Do something (navigation, ...)
-      debugPrint('Received URI: $uri');
-  });
+  appLinks.uriLinkStream.listen(handleDeepLink);
 
   runApp(
     EasyLocalization(
@@ -60,6 +58,16 @@ Future<void> main() async {
   //     },
   //   ),
   // );
+}
+
+void handleDeepLink(Uri uri) {
+  debugPrint('Received URI: $uri');
+
+  if (uri.host != DeepLinks.host) return;
+
+  // `go` is safe before the router is mounted (cold start), it only updates
+  // the route information that the router reads on its first build.
+  router.go(uri.path);
 }
 
 Future<void> setupCrashlytics() async {

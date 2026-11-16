@@ -3,10 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:navigations/core/routing/deep_links.dart';
+import 'package:navigations/core/routing/routes.dart';
 import 'package:navigations/features/product_details/data/models/products_details_model.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../cubit/product_details_cubit.dart';
+
+/// When the screen is opened from a deep link it can be the only page in the
+/// stack, and `context.pop()` would throw "There is nothing to pop".
+void _goBack(BuildContext context) =>
+    context.canPop() ? context.pop() : context.go(Routes.home);
 
 class ProductDetailsScreen extends StatefulWidget {
   const ProductDetailsScreen({super.key, required this.productId});
@@ -37,19 +43,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            SharePlus.instance.share(
-              ShareParams(
-                text:
-                    'Checkout our new product'
-                    '\n'
-                    '${DeepLinks.listing(widget.productId.toString())}',
-              ),
-            );
-          },
-          icon: Icon(Icons.share_rounded),
-        ),
+        leading: BackButton(onPressed: () => _goBack(context)),
+        actions: [
+          IconButton(
+            onPressed: () {
+              SharePlus.instance.share(
+                ShareParams(
+                  text:
+                      'Check out our new product'
+                      '\n'
+                      '${DeepLinks.listing(widget.productId.toString())}',
+                ),
+              );
+            },
+            icon: Icon(Icons.share_rounded),
+          ),
+        ],
       ),
       body: BlocConsumer<ProductDetailsCubit, ProductDetailsState>(
         listener: (context, state) {},
@@ -217,9 +226,7 @@ class ProductDetailsView extends StatelessWidget {
                         CircleAvatar(
                           backgroundColor: Colors.grey,
                           child: IconButton(
-                            onPressed: () {
-                              context.pop();
-                            },
+                            onPressed: () => _goBack(context),
                             icon: Icon(
                               Icons.arrow_back,
                               color: Colors.white,
