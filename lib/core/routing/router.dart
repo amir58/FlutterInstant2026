@@ -41,8 +41,8 @@ import 'package:navigations/features/upload/presentation/pages/upload_screen.dar
 
 final router = GoRouter(
   // initialLocation: '/',
-  // initialLocation: Routes.home,
-  initialLocation: Routes.notes,
+  initialLocation: Routes.home,
+  // initialLocation: Routes.notes,
   routes: [
     GoRoute(
       path: '/',
@@ -103,6 +103,24 @@ final router = GoRouter(
             ),
           ),
           child: ProductDetailsScreen(productId: productId),
+        );
+      },
+    ),
+    GoRoute(
+      path: 'l/:id',
+      builder: (context, state) {
+        // final productId = state.extra as int;
+        final productId = state.pathParameters['id'] ?? '0';
+        
+        final productIdAsInt = int.tryParse(productId) ?? 0;
+
+        return BlocProvider(
+          create: (context) => ProductDetailsCubit(
+            ProductDetailsRepo(
+              ProductDetailsRemoteDataSource(DioFactory.getDio()),
+            ),
+          ),
+          child: ProductDetailsScreen(productId: productIdAsInt),
         );
       },
     ),

@@ -1,5 +1,9 @@
+import 'package:app_links/app_links.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:navigations/core/bloc/my_bloc_observer.dart';
@@ -8,11 +12,13 @@ import 'package:navigations/core/routing/router.dart';
 import 'package:navigations/core/theme/app_theme.dart';
 import 'package:navigations/core/theme/theme_cubit.dart';
 import 'package:navigations/firebase_options.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // App id = Package name = Bundle id
 // Package name => android
 // Bundle id => iOS
+
+final remoteConfig = FirebaseRemoteConfig.instance;
+final appLinks = AppLinks(); // AppLinks is singleton
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,10 +28,18 @@ Future<void> main() async {
   await EasyLocalization.ensureInitialized();
 
   Bloc.observer = MyBlocObserver();
-  
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await setupCrashlytics();
+
+  await setupRemoteConfig();
+
+  // Subscribe to all events (initial link and further)
+  final sub = appLinks.uriLinkStream.listen((uri) {
+      // Do something (navigation, ...)
+      debugPrint('Received URI: $uri');
+  });
 
   runApp(
     EasyLocalization(
@@ -46,6 +60,39 @@ Future<void> main() async {
   //     },
   //   ),
   // );
+}
+
+Future<void> setupCrashlytics() async {
+  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
+    !kDebugMode,
+  );
+
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+}
+
+Future<void> setupRemoteConfig() async {
+  await remoteConfig.setDefaults(const {
+    'killApp': false,
+    'min_supported_version': '1.0.0',
+  });
+
+  await remoteConfig.setConfigSettings(
+    RemoteConfigSettings(
+      fetchTimeout: const Duration(seconds: 10),
+      minimumFetchInterval: Duration.zero,
+    ),
+  );
+
+  await remoteConfig.fetchAndActivate();
+
+  final killApp = remoteConfig.getBool('killApp');
+
+  debugPrint('Kill App ? $killApp');
 }
 
 class MainApp extends StatelessWidget {

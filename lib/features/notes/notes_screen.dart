@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:navigations/core/theme/theme_toggle_button.dart';
 import 'package:navigations/core/utils/theme_x.dart';
+import 'package:navigations/main.dart';
 
 import 'note.dart';
 
@@ -26,24 +27,39 @@ class _NotesScreenState extends State<NotesScreen> {
     // );
 
     // google();
+    killApp();
+  }
+
+  void killApp() {
+    final killApp = remoteConfig.getBool('killApp');
+    
+    final killAppMessage = remoteConfig.getString('kill_app_message');
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (killApp) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) =>
+              AlertDialog(title: Text(killAppMessage)),
+          // AlertDialog(title: Text('Something went wrong!')),
+        );
+      }
+    });
   }
 
   Future<void> google() async {
     // مرة واحدة في main بعد Firebase.initializeApp
     await GoogleSignIn.instance.initialize();
 
-    try {
-      // لما المستخدم يدوس الزرار
-      final account = await GoogleSignIn.instance.authenticate();
+    // لما المستخدم يدوس الزرار
+    final account = await GoogleSignIn.instance.authenticate();
 
-      final credential = GoogleAuthProvider.credential(
-        idToken: account.authentication.idToken,
-      );
+    final credential = GoogleAuthProvider.credential(
+      idToken: account.authentication.idToken,
+    );
 
-      await FirebaseAuth.instance.signInWithCredential(credential);
-    } catch (e) {
-      debugPrint(e.toString());
-    }
+    await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   Future<void> signIn() async {
@@ -118,7 +134,10 @@ class _NotesScreenState extends State<NotesScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () {
+          // FirebaseCrashlytics.instance.crash();
+          throw Exception();
+        },
         icon: const Icon(Icons.add),
         label: const Text('ملاحظة جديدة'),
       ),

@@ -16,7 +16,7 @@ class ProductsRemoteDataSource {
     int limit = 20,
     int skip = 0,
   }) async {
-    try {
+    try  {
       final response = await _dio.get(
         EndPoints.products,
         queryParameters: {'limit': limit, 'skip': skip},

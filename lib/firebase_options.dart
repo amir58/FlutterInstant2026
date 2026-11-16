@@ -56,13 +56,14 @@ class DefaultFirebaseOptions {
     projectId: 'instant-flutter-course',
     storageBucket: 'instant-flutter-course.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBy8QmPK8N_riFngsibMCvqnzcJDKQ6oDc',
     appId: '1:730316660136:ios:6d29c51fdc9d663ec4519d',
     messagingSenderId: '730316660136',
     projectId: 'instant-flutter-course',
     storageBucket: 'instant-flutter-course.firebasestorage.app',
+    androidClientId: '730316660136-pjhecd4coa82skki503k9hdtii1gbkc2.apps.googleusercontent.com',
+    iosClientId: '730316660136-gin53guebfglps5gg7m9drdm0hpcqiun.apps.googleusercontent.com',
     iosBundleId: 'com.example.navigations',
   );
 }
