@@ -38,12 +38,26 @@ import 'package:navigations/features/search_products/presentation/cubit/search_p
 import 'package:navigations/features/search_products/presentation/screens/search_products_screen.dart';
 import 'package:navigations/features/upload/presentation/cubit/upload_cubit.dart';
 import 'package:navigations/features/upload/presentation/pages/upload_screen.dart';
+import 'package:navigations/lo2ta/auth/presentation/cubit/auth_cubit.dart';
+import 'package:navigations/lo2ta/auth/presentation/cubit/sign_in_cubit.dart';
+import 'package:navigations/lo2ta/auth/presentation/pages/sign_in_screen.dart';
 
 final router = GoRouter(
   // initialLocation: '/',
-  initialLocation: Routes.home,
+  initialLocation: Routes.signin,
+
   // initialLocation: Routes.notes,
   routes: [
+    GoRoute(
+      path: Routes.signin,
+      builder: (context, state) => MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => getIt<SignInCubit>()),
+          BlocProvider(create: (context) => getIt<AuthCubit>()),
+        ],
+        child: SignInScreen(),
+      ),
+    ),
     GoRoute(
       path: '/',
       builder: (context, state) => BlocProvider(
